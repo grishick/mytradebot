@@ -1,0 +1,26 @@
+{
+  "name": "mytradebot",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grishick/mytradebot.git"
+  },
+  "dependencies": {
+    "nconf": "^0.8.4",
+    "gdax": "^0.4.2",
+    "aws-sdk":"*",
+    "uuid":"^3.1.0",
+    "string.format":"*",
+    "argv":"*"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test":"mocha",
+    "package":"zip -r ${npm_package_name}.zip ./constants.js ./lambda.js ./config.js ./lib/*.js ./node_modules/*"
+  },
+  "devDependencies": {
+    "mocha": "^3.0.2",
+    "should": "^11.1.0",
+    "supertest": "^2.0.0"
+  }
+}
