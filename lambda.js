@@ -33,12 +33,23 @@ exports.handler = function(event, context, callback) {
             var errorTime = new Date().toLocaleString("en-us", {timeZone: "America/Los_Angeles"});
             var errMsg = "Encountered error at " + errorTime + ".\n Error: " + JSON.stringify(err);
             console.log(errMsg)
-            notifier.notify(errMsg, function(err) {
-                if(err) {
-                    console.log("Notifier returned an error trying to send error notification. " + JSON.stringify(err));
-                }
+            var needToNotify = true;
+            if(err.resp && err.resp.statusCode && (err.resp.statusCode == 500 || err.resp.statusCode == 504)) {
+                needToNotify = false;
+            }
+            if(err.resp && err.message && err.message == "request timestamp expired" && err.resp.statusCode && err.resp.statusCode == 400) {
+                needToNotify = false;
+            }
+            if(needToNotify) {
+                notifier.notify(errMsg, function(err) {
+                    if(err) {
+                        console.log("Notifier returned an error trying to send error notification. " + JSON.stringify(err));
+                    }
+                    callback(new Error(errMsg));
+                })
+            } else {
                 callback(new Error(errMsg));
-            })
+            }
         } else {
             console.log("Success!")
         }
