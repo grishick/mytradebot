@@ -34,7 +34,7 @@ exports.handler = function(event, context, callback) {
             var errMsg = "Encountered error at " + errorTime + ".\n Error: " + JSON.stringify(err);
             console.log(errMsg)
             var needToNotify = true;
-            if(err.resp && err.resp.statusCode && (err.resp.statusCode == 500 || err.resp.statusCode == 504)) {
+            if(err.resp && err.resp.statusCode && err.resp.statusCode >= 500 && err.resp.statusCode <= 510) {
                 needToNotify = false;
             }
             if(err.resp && err.message && err.message == "request timestamp expired" && err.resp.statusCode && err.resp.statusCode == 400) {
